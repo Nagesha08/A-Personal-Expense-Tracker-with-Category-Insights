@@ -1,0 +1,39 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/expensewise', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// Expense model
+const Expense = mongoose.model('Expense', {
+  name: String,
+  amount: Number,
+  category: String,
+  date: { type: Date, default: Date.now },
+});
+
+// POST - Add new expense
+app.post('/api/expenses', async (req, res) => {
+  const expense = new Expense(req.body);
+  await expense.save();
+  res.status(201).send(expense);
+});
+
+// GET - All expenses
+app.get('/api/expenses', async (req, res) => {
+  const expenses = await Expense.find().sort({ date: -1 });
+  res.send(expenses);
+});
+
+// Server start
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
