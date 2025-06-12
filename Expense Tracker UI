@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="expenseApp">
+<head>
+  <meta charset="UTF-8">
+  <title>ExpenseWise</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 4 -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .container-box {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .add-expense-btn {
+      background-color: #00796b;
+      color: #fff;
+    }
+
+    .add-expense-btn:hover {
+      background-color: #00695c;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    .info-icon {
+      font-size: 48px;
+      color: #999;
+    }
+  </style>
+</head>
+<body ng-controller="ExpenseController">
+  <div class="container mt-5 mb-4">
+    <div class="text-left mb-4">
+      <h3><i class="fas fa-wallet text-success mr-2"></i><strong>ExpenseWise</strong></h3>
+    </div>
+
+    <!-- Add Expense Form -->
+    <div class="container-box mb-4">
+      <h4><i class="fas fa-plus-circle text-success mr-2"></i> Add New Expense</h4>
+      <form ng-submit="addExpense()">
+        <div class="form-group">
+          <label>Expense Name</label>
+          <input type="text" class="form-control" placeholder="e.g., Coffee, Lunch" ng-model="expense.name" required>
+        </div>
+        <div class="form-group">
+          <label>Amount</label>
+          <input type="number" class="form-control" placeholder="e.g., 15.50" ng-model="expense.amount" required>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select class="form-control" ng-model="expense.category" required>
+            <option value="" disabled selected>Select a category</option>
+            <option>Food</option>
+            <option>Transport</option>
+            <option>Utilities</option>
+            <option>Entertainment</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-block add-expense-btn">
+          <i class="fas fa-plus-circle mr-1"></i> Add Expense
+        </button>
+      </form>
+    </div>
+
+    <!-- My Expenses Section -->
+    <div class="container-box text-center">
+      <h4 class="text-left"><i class="fas fa-list text-success mr-2"></i> My Expenses</h4>
+      <div ng-if="expenses.length === 0">
+        <i class="fas fa-info-circle info-icon my-3"></i>
+        <p><strong>No expenses recorded yet.</strong></p>
+        <p class="text-muted">Start by adding an expense using the form above.</p>
+      </div>
+      <!-- Future: Add expense list here -->
+    </div>
+  </div>
+
+  <footer>
+    © 2025 ExpenseWise. All rights reserved.
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <script>
+    const app = angular.module('expenseApp', []);
+    app.controller('ExpenseController', function($scope) {
+      $scope.expenses = [];
+      $scope.expense = {};
+
+      $scope.addExpense = function() {
+        if ($scope.expense.name && $scope.expense.amount && $scope.expense.category) {
+          $scope.expenses.push({...$scope.expense});
+          $scope.expense = {};
+        }
+      };
+    });
+  </script>
+</body>
+</html>
